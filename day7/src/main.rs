@@ -1,8 +1,8 @@
 use std::fs::read_to_string;
 
-const SIZE_THRESHOLD: u64 = 100_000;
 const NEED_SPACE: u64 = 30_000_000;
 const TOTAL_SPACE: u64 = 70_000_000;
+const SIZE_THRESHOLD: u64 = 100_000;
 
 fn main() {
     println!("part1: {}", part1());
@@ -38,14 +38,12 @@ fn part2() -> u64 {
             collect(),
     };
 
-    let total_used = d.sum_of_small("/".to_string());
+    let total_used = d.total_used();
+    let space_to_find = NEED_SPACE - (TOTAL_SPACE - total_used);
+    let smallest = d.smallest_to_delete(space_to_find, "/".to_string());
 
-    d.reset_idx();
-    d.smallest_to_delete(NEED_SPACE - (TOTAL_SPACE - total_used), "/".to_string());
-
-    return d.smallest;
+    return smallest;
 }
-
 
 struct Digger {
     size: u64,
@@ -55,22 +53,31 @@ struct Digger {
 }
 
 impl Digger {
-    pub fn reset_idx(&mut self) {
-        self.cur_idx = 0;
+    pub fn total_used(&mut self) -> u64 {
+        let mut total: u64 = 0;
+
+        for row in self.rows.iter() {
+            if is_file(row.as_str()) {
+                let (size, _) = file_info(row.as_str());
+
+                total += size;
+            }
+        }
+
+        return total;
     }
 
     pub fn sum_of_small(&mut self, path: String) -> u64 {
         println!("AT {}", path);
 
         let mut dir_size: u64 = 0;
-        let mut row: &str = "";
 
         loop {
             if self.cur_idx >= self.rows.len() {
                 break;
             }
 
-            row = self.rows[self.cur_idx].as_str();
+            let row = self.rows[self.cur_idx].as_str();
 
             println!("{}", self.cur_idx);
 
@@ -117,7 +124,7 @@ impl Digger {
         return dir_size;
     }
 
-    pub fn smallest_to_delete(&mut self, find_dir: u64, path: String) -> u64 {
+    pub fn smallest_to_delete(&mut self, space_to_find: u64, path: String) -> u64 {
         println!("AT {}", path);
 
         let mut row: &str = "";
@@ -147,10 +154,7 @@ impl Digger {
             }
 
             if row == "$ cd .." {
-                if dir_size <= SIZE_THRESHOLD {
-                    self.size += dir_size;
-                }
-                if dir_size >= find_dir && dir_size < self.smallest {
+                if dir_size >= space_to_find && dir_size < self.smallest {
                     self.smallest = dir_size
                 }
 
@@ -165,14 +169,11 @@ impl Digger {
                 self.cur_idx += 1;
                 let dir_to_go = dir_name(row).to_string();
 
-                dir_size += self.smallest_to_delete(find_dir, dir_to_go);
+                dir_size += self.smallest_to_delete(space_to_find, dir_to_go);
             }
         }
 
-        if dir_size <= SIZE_THRESHOLD {
-            self.size += dir_size;
-        }
-        if dir_size >= find_dir && dir_size < self.smallest {
+        if dir_size >= space_to_find && dir_size < self.smallest {
             self.smallest = dir_size
         }
 
@@ -194,10 +195,6 @@ fn cd_dir(inp: &str) -> &str {
 
     return coll.next().unwrap();
 }
-
-// fn is_dir(inp: &str) -> bool {
-//     return inp.starts_with("dir ");
-// }
 
 fn dir_name(inp: &str) -> &str {
     let mut coll = inp.split_whitespace();
