@@ -19,19 +19,24 @@ def part1():
     print(contains)
 
 def part2():
-    contains = 0
     with open("./day4") as f:
         inp = [x.strip().split(",") for x in f.readlines()]
+
+    contains = 0
 
     for item in inp:
         a = [int(x) for x in item[0].split("-")]
         b = [int(x) for x in item[1].split("-")]
 
-        aset = set(range(a[0], a[1]+1))
-        bset = set(range(b[0], b[1]+1))
+        a_coll = set(range(a[0], a[1]+1))
+        b_coll = set(range(b[0], b[1]+1))
 
-        if len(aset.intersection(bset))>0:
+        if len(a_coll.intersection(b_coll))>0:
             contains += 1
             continue
 
     print(contains)
+
+if __name__=='__main__':
+    part1()
+    part2()

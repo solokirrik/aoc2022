@@ -23,6 +23,7 @@ def part1():
         ["V", "F", "L", "D", "T", "H", "M", "W", ][::-1],
         ["F", "J", "M", "V", "B", "P", "L", ][::-1],
     ]
+
     raw_moves = inp[10:]
 
     moves = [x.split(" ") for x in raw_moves]
@@ -68,3 +69,7 @@ def part2():
         queues[toIdx] += elems
 
     print("".join([x[-1]for x in queues]))
+
+if __name__=='__main__':
+    part1()
+    part2()

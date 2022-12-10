@@ -1,7 +1,7 @@
 def run():
     inp = ""
 
-    with open("./task1") as f:
+    with open("./day1") as f:
         inp = f.read()
 
     numberstr = [x.split("\n") for x in inp.split("\n\n")]
@@ -14,3 +14,5 @@ def run():
     print(sorted(cals)[-1])
     print(sum(sorted(cals)[-3:]))
 
+if __name__ == '__main__':
+    run()
