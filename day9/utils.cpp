@@ -2,16 +2,17 @@
 #include <vector>
 #include <array>
 #include <fstream>
-#include "utils.hpp"
 
-using namespace std;
+#include "utils.hpp"
+#include "point.hpp"
+#include "rope.hpp"
 
 std::vector<std::pair<char, int>> readMoves() {
     std::string mystring;
     std::ifstream myfile;
     std::vector<std::pair<char, int>> moves;
     
-    myfile.open("/Users/sol/go/src/github.com/solokirrik/aoc2022/day9/day9.txt");
+    myfile.open("./day9.txt");
     
     if (!myfile.is_open())  {
         std::cout << "unable to read file" << '\n';
@@ -35,15 +36,6 @@ std::vector<std::pair<char, int>> readMoves() {
 void printMoves(std::vector<std::pair<char, int>> input) {
     for (int i = 0; i < input.size(); i++) {
         std::cout << input.at(i).first << '-' << input.at(i).second << ' ';
-    }
-    
-    std::cout << '\n';
-}
-
-
-void printCoords(std::vector<std::array<int, 2>> input) {
-    for (int i = 0; i < input.size(); i++) {
-        std::cout << input.at(i)[0] << '-' << input.at(i)[1] << ' ';
     }
     
     std::cout << '\n';
