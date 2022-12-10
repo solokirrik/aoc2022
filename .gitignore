@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+*.gch
 
 # Test binary, built with `go test -c`
 *.test
@@ -15,3 +16,9 @@
 vendor/
 node_modules
 */target
+
+# other things from IDEs or fs
+.idea
+.DS_Store
+.vscode
+aoc2022.xcodeproj
