@@ -16,9 +16,12 @@
 vendor/
 node_modules
 */target
-
+*/Properties
+*/obj
+*/bin
 # other things from IDEs or fs
 .idea
 .DS_Store
 .vscode
 aoc2022.xcodeproj
+*/*.csproj
